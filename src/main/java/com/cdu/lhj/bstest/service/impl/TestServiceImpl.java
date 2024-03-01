@@ -7,7 +7,7 @@ import com.cdu.lhj.bstest.service.TestService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TestServiceImpl extends ServiceImpl<TestMapper,Test> implements TestService {
+public class TestServiceImpl extends ServiceImpl<TestMapper, Test> implements TestService {
 
     @Override
     public String test() {

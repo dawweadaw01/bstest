@@ -23,25 +23,26 @@ public class TestController {
     }
 
     @RequestMapping("testSatoken")
-    public String testSatoken(){
+    public String testSatoken() {
         System.out.println(123);
         StpUtil.login(10001);
         return StpUtil.getPermissionList().toString();
     }
 
     // 会话登录接口
-    @RequestMapping(value = "doLogin",produces = "application/json")
+    @RequestMapping(value = "doLogin", produces = "application/json")
     public SaResult doLogin(@RequestBody User user) {
         // 第一步：比对前端提交的账号名称、密码
-        if("zhang".equals(user.getName()) && "123456".equals(user.getPwd())) {
+        if ("zhang".equals(user.getName()) && "123456".equals(user.getPwd())) {
             // 第二步：根据账号id，进行登录
             StpUtil.login(10001);
             return SaResult.ok(StpUtil.getTokenValue());
         }
         return SaResult.error("登录失败");
     }
-    @RequestMapping(value = "test",produces = "application/json")
-    public SaResult test(@RequestHeader(value = "satoken",required = false) String token) {
+
+    @RequestMapping(value = "test", produces = "application/json")
+    public SaResult test(@RequestHeader(value = "satoken", required = false) String token) {
         Object loginIdByToken = StpUtil.getLoginIdByToken(token);
         return SaResult.data(loginIdByToken);
     }
