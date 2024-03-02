@@ -11,4 +11,10 @@
         <!--@mbg.generated-->
         role_id, permission_id
     </sql>
+
+    <select id="getPermissionByRoleId" resultType="com.cdu.lhj.bstest.pojo.SysPermission">
+        select p.* from sys_role_permission rp
+        left join sys_permission p on rp.permission_id = p.id
+        where rp.role_id = #{roleId}
+    </select>
 </mapper>
