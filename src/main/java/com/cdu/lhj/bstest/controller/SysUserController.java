@@ -1,6 +1,7 @@
 package com.cdu.lhj.bstest.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.StrUtil;
@@ -24,7 +25,7 @@ public class SysUserController {
         }
         // 进行登录
         try {
-            SysUser sysUser = sysUserService.doLogin(user.getName(), user.getPwd());
+            SysUser sysUser = sysUserService.doLogin(user.getName(),SaSecureUtil.md5(user.getPwd()));
             if (sysUser != null) {
                 StpUtil.login(sysUser.getId());
                 return SaResult.data(StpUtil.getTokenValue());
@@ -42,6 +43,9 @@ public class SysUserController {
         if (StrUtil.isEmpty(user.getUsername()) || StrUtil.isEmpty(user.getPassword())) {
             return SaResult.error("参数不能为空");
         }
+        if(sysUserService.getUserByName(user.getUsername()) != null) {
+            return SaResult.error("用户名已存在");
+        }
         return SaResult.data(sysUserService.saveUser(user));
     }
 
@@ -53,6 +57,7 @@ public class SysUserController {
         return SaResult.data(sysUserService.deleteUser(id));
     }
 
+    @SaCheckPermission(value = {"admin"}, orRole = "super-admin")
     @PostMapping("/update")
     public SaResult update(@RequestBody SysUser user) {
         // 进行判空操作

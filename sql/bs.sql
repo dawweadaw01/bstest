@@ -48,3 +48,12 @@ CREATE TABLE `sys_role_permission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+-- 角色权限关系表
+CREATE TABLE `sys_role_permission` (
+                                       `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+                                       `role_id` BIGINT(20) NOT NULL,
+                                       `permission_id` BIGINT(20) NOT NULL,
+                                       PRIMARY KEY (`id`),
+                                       UNIQUE KEY `role_permission_unique` (`role_id`, `permission_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+

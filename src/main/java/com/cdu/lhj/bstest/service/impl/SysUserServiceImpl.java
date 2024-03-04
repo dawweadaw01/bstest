@@ -1,5 +1,6 @@
 package com.cdu.lhj.bstest.service.impl;
 
+import cn.dev33.satoken.secure.SaSecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -22,12 +23,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     @Transactional
     public boolean saveUser(SysUser user) {
+        user.setPassword(SaSecureUtil.md5(user.getPassword()));
         return save(user);
     }
 
     @Override
     @Transactional
     public boolean updateUser(SysUser user) {
+        user.setPassword(SaSecureUtil.md5(user.getPassword()));
         return updateById(user);
     }
 
