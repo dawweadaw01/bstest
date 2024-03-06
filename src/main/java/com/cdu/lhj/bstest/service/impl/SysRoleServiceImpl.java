@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cdu.lhj.bstest.mapper.SysRoleMapper;
 import com.cdu.lhj.bstest.pojo.SysRole;
 import com.cdu.lhj.bstest.service.SysRoleService;
+import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public boolean saveRole(SysRole role) {
+        role.setId(SimpleTimestampIdGenerator.nextId());
         return save(role);
     }
 

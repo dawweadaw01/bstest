@@ -21,7 +21,7 @@ public class SysUserController {
     public SaResult doLogin(@RequestBody User user) {
         // 判空
         if (StrUtil.isEmpty(user.getName()) || StrUtil.isEmpty(user.getPwd())) {
-            return SaResult.error("参数不能为空");
+            return SaResult.error("用户名或者密码不能为空");
         }
         // 进行登录
         try {

@@ -10,4 +10,6 @@ public interface SysRolePermissionService extends IService<SysRolePermission> {
 
     List<SysPermission> getPermissionByRoleId(Long roleId);
 
+    boolean saveRolePermission(SysRolePermission rolePermission);
+
 }

@@ -5,6 +5,7 @@ import com.cdu.lhj.bstest.mapper.SysUserRoleMapper;
 import com.cdu.lhj.bstest.pojo.SysRole;
 import com.cdu.lhj.bstest.pojo.SysUserRole;
 import com.cdu.lhj.bstest.service.SysUserRoleService;
+import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
     @Override
     @Transactional
     public boolean saveUserRole(SysUserRole userRole) {
-
+        userRole.setId(SimpleTimestampIdGenerator.nextId());
         return save(userRole);
     }
 

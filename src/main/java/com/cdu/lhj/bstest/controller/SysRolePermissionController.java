@@ -33,7 +33,7 @@ public class SysRolePermissionController {
         if (sysRoleService.getById(rolePermission.getRoleId()) == null || sysPermissionService.getById(rolePermission.getPermissionId()) == null) {
             return SaResult.error("角色或权限不存在");
         }
-        return SaResult.data(sysRolePermissionService.save(rolePermission));
+        return SaResult.data(sysRolePermissionService.saveRolePermission(rolePermission));
     }
 
     @PostMapping("/delete")
