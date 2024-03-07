@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdu.lhj.bstest.mapper.CatMapper">
+  <resultMap id="BaseResultMap" type="com.cdu.lhj.bstest.pojo.Cat">
+    <!--@mbg.generated-->
+    <!--@Table cat-->
+    <id column="cat_id" jdbcType="BIGINT" property="catId" />
+    <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="preferences" jdbcType="VARCHAR" property="preferences" />
+    <result column="health_status" jdbcType="VARCHAR" property="healthStatus" />
+    <result column="available_for_adoption" jdbcType="BOOLEAN" property="availableForAdoption" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    cat_id, category_id, `name`, age, gender, preferences, health_status, available_for_adoption, 
+    shop_id
+  </sql>
+</mapper>

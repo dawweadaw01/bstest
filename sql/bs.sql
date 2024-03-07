@@ -57,3 +57,23 @@ CREATE TABLE `sys_role_permission` (
                                        UNIQUE KEY `role_permission_unique` (`role_id`, `permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--猫咪种类信息表（cat_categories）
+CREATE TABLE cat_categories (
+                                category_id INT AUTO_INCREMENT PRIMARY KEY,
+                                name VARCHAR(255) NOT NULL COMMENT '猫咪种类名称',
+                                origin VARCHAR(255) COMMENT '猫咪种类的原产地',
+                                description TEXT COMMENT '种类描述'
+) COMMENT='猫咪种类信息表，存储各种猫咪的种类信息';
+
+
+--具体猫咪信息表（cats）
+CREATE TABLE cat (
+                     cat_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '猫咪ID',
+                     category_id INT COMMENT '猫咪种类ID，外键，引用cat_categories表的category_id',
+                     name VARCHAR(255) NOT NULL COMMENT '猫咪名称',
+                     age INT COMMENT '猫咪年龄',
+                     gender VARCHAR(50) COMMENT '猫咪性别',
+                     preferences VARCHAR(255) COMMENT '猫咪喜好',
+                     health_status VARCHAR(255) COMMENT '猫咪健康状态',
+                     available_for_adoption BOOLEAN COMMENT '是否可领养'
+) COMMENT='具体猫咪信息表，存储每只猫咪的详细信息';

@@ -22,6 +22,7 @@ public class StpInterfaceConfig implements StpInterface {
     @Resource
     private SysRolePermissionService sysRolePermissionService;
 
+    // todo 使用redis缓存权限信息避免每次都查询数据库
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         // 转换为long类型

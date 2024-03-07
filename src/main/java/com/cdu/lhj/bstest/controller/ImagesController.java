@@ -35,6 +35,18 @@ public class ImagesController {
         return SaResult.data(imagesService.getImages(Long.valueOf((String)StpUtil.getLoginId())));
     }
 
+    @SaCheckPermission(value = {"admin"}, orRole = "super-admin")
+    @PostMapping("adminUpload")
+    public SaResult adminUploadImage(@RequestParam MultipartFile file, @RequestParam Long id) {
+        String url;
+        try {
+            url = imagesService.saveImage(file, id);
+        } catch (Exception e) {
+            return SaResult.error(e.getMessage());
+        }
+        return SaResult.data(url);
+    }
+
     @PostMapping("Delete")
     public SaResult DeleteImage(@RequestParam Long imageId) {
         try {
