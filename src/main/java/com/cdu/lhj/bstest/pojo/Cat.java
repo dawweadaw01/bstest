@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * 具体猫咪信息表，存储每只猫咪的详细信息
  */
@@ -69,4 +71,15 @@ public class Cat {
      */
     @TableField(value = "shop_id")
     private Long shopId;
+    /**
+     * 健康状态码
+     */
+    @TableField(value= "health_status_code")
+    private Integer healthStatusCode;
+
+    /**
+     * 猫咪图片
+     */
+    @TableField(exist = false)
+    List<Image> images;
 }

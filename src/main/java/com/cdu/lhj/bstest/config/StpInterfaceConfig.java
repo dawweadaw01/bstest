@@ -38,8 +38,9 @@ public class StpInterfaceConfig implements StpInterface {
 
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
+        Long id = Long.valueOf((String) loginId);
         // 根据账号id查询角色
-        List<SysRole> roles = sysUserRoleService.getRoleByUserId((Long) loginId);
+        List<SysRole> roles = sysUserRoleService.getRoleByUserId(id);
         // 返回角色标识符集合
         List<String> list = new ArrayList<>();
         // 换成lambda表达式

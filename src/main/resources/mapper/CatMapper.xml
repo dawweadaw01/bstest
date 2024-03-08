@@ -13,10 +13,39 @@
     <result column="health_status" jdbcType="VARCHAR" property="healthStatus" />
     <result column="available_for_adoption" jdbcType="BOOLEAN" property="availableForAdoption" />
     <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="health_status_code" jdbcType="INTEGER" property="healthStatusCode" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     cat_id, category_id, `name`, age, gender, preferences, health_status, available_for_adoption, 
-    shop_id
+    shop_id,health_status_code
   </sql>
+
+  <select id="getCatListByPage" resultMap="BaseResultMap" resultType="com.cdu.lhj.bstest.pojo.Cat">
+      <!--@mbg.generated-->
+      select
+      <include refid="Base_Column_List"/>
+      from cat
+      <where>
+          <if test="catDeBo.categoryId != null">
+              category_id = #{catDeBo.categoryId}
+          </if>
+          <if test="catDeBo.name != null and catDeBo.name != ''">
+              and `name` like concat('%', #{catDeBo.name}, '%')
+          </if>
+          <if test="catDeBo.age != null">
+              and age = #{catDeBo.age}
+          </if>
+          <if test="catDeBo.healthStatusCode != null">
+              and health_status_code = #{catDeBo.healthStatusCode}
+          </if>
+          <if test="catDeBo.availableForAdoption != null">
+              and available_for_adoption = #{catDeBo.availableForAdoption}
+          </if>
+          and shop_id = #{catDeBo.shopId}
+      </where>
+      <if test="catDeBo.pageBo.order != null and catDeBo.pageBo.order != ''">
+          order by #{catDeBo.pageBo.order}
+      </if>
+  </select>
 </mapper>
