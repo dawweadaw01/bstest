@@ -14,4 +14,6 @@ public interface CatService extends IService<Cat>{
     boolean updateByCatIdAndId(Cat cat, Long id);
 
     List<Cat> getCatListByPage(CatDeBo catDeBo);
+
+    Cat getByshopIdAndCatId(Long userIdLong, Long catId);
 }

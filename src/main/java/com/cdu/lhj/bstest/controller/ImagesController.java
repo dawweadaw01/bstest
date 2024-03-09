@@ -1,6 +1,8 @@
 package com.cdu.lhj.bstest.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.annotation.SaMode;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.cdu.lhj.bstest.pojo.Image;
@@ -14,6 +16,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("images")
 public class ImagesController {
+    // todo 根据shopid和猫咪id来进行图片的上传，实现猫咪图片的上传
     @Resource
     private ImagesService imagesService;
 
