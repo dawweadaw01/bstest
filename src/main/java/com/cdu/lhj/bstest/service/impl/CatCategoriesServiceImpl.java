@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cdu.lhj.bstest.pojo.Bo.CatCategoriesBo;
 import com.cdu.lhj.bstest.service.ImagesService;
 import jakarta.annotation.Resource;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
@@ -18,6 +19,14 @@ public class CatCategoriesServiceImpl extends ServiceImpl<CatCategoriesMapper, C
 
     @Resource
     private ImagesService imagesService;
+
+    @Override
+    public CatCategories getCatCategoriesById(Long id) {
+        CatCategories catCategories = this.baseMapper.selectById(id);
+        catCategories.setImages(imagesService.getImages(catCategories.getCategoryId()));
+        return catCategories;
+    }
+
     @Override
     public List<CatCategories> getCatCategoriesListByPage(CatCategoriesBo catCategoriesBo) {
         // 判断是否有分页信息，没有则赋默认值
@@ -28,9 +37,7 @@ public class CatCategoriesServiceImpl extends ServiceImpl<CatCategoriesMapper, C
             catCategoriesBo.setSize(10);
         }
         Page<CatCategories> catCategoriesPage = new Page<>(catCategoriesBo.getPage(), catCategoriesBo.getSize());
-        LambdaQueryWrapper<CatCategories> wrapper
-                = new LambdaQueryWrapper<CatCategories>().eq(CatCategories::getCategoryId, catCategoriesBo.getCategoryId());
-        List<CatCategories> records = this.baseMapper.selectPage(catCategoriesPage, wrapper).getRecords();
+        List<CatCategories> records = this.baseMapper.selectPage(catCategoriesPage, null).getRecords();
         records.forEach(catCategories -> catCategories.setImages(imagesService.getImages(catCategories.getCategoryId())));
         return records;
     }

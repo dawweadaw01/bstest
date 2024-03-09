@@ -8,6 +8,7 @@ import cn.dev33.satoken.util.SaResult;
 import com.cdu.lhj.bstest.pojo.Bo.CatDeBo;
 import com.cdu.lhj.bstest.pojo.Cat;
 import com.cdu.lhj.bstest.service.CatService;
+import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class CatController {
         String loginId = (String) StpUtil.getLoginId();
         Long id = Long.valueOf(loginId);
         cat.setShopId(id);
+        cat.setCatId(SimpleTimestampIdGenerator.nextId());
         return SaResult.data(catService.save(cat));
     }
 

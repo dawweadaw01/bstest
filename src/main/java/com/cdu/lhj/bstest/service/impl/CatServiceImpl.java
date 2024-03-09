@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cdu.lhj.bstest.pojo.Bo.CatDeBo;
 import com.cdu.lhj.bstest.pojo.Bo.PageBo;
+import com.cdu.lhj.bstest.service.CatCategoriesService;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
@@ -13,6 +15,9 @@ import com.cdu.lhj.bstest.mapper.CatMapper;
 import com.cdu.lhj.bstest.service.CatService;
 @Service
 public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatService{
+
+    @Resource
+    private CatCategoriesService catCategoriesService;
 
     @Override
     public boolean removeByCatIdAndId(Long catId, Long id) {
@@ -31,6 +36,9 @@ public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatSe
         // 构造分页参数
         Page<Cat> page = new Page<>(catDeBo.getPageBo().getPage(), catDeBo.getPageBo().getSize());
         // 调用mapper查询
-        return this.baseMapper.getCatListByPage(page,catDeBo);
+        List<Cat> listByPage = this.baseMapper.getCatListByPage(page, catDeBo);
+        // 循环查询分类
+        listByPage.forEach(cat -> cat.setCatCategories(catCategoriesService.getCatCategoriesById(cat.getCategoryId())));
+        return listByPage;
     }
 }

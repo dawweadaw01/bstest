@@ -8,6 +8,8 @@ import com.cdu.lhj.bstest.mapper.SysUserMapper;
 import com.cdu.lhj.bstest.pojo.SysUser;
 import com.cdu.lhj.bstest.service.SysUserService;
 import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     @Transactional
+    @CacheEvict(value = "user", key = "#user.username")
     public boolean saveUser(SysUser user) {
         user.setPassword(SaSecureUtil.md5(user.getPassword()));
         user.setId(SimpleTimestampIdGenerator.nextId());
@@ -31,6 +34,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     @Transactional
+    @CacheEvict(value = "user", key = "#user.username")
     public boolean updateUser(SysUser user) {
         user.setPassword(SaSecureUtil.md5(user.getPassword()));
         return updateById(user);
@@ -48,12 +52,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
+    @Cacheable(value = "user", key = "#username")
     public SysUser getUserByName(String username) {
         LambdaQueryWrapper<SysUser> eq = new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username);
         return getOne(eq);
     }
 
     @Override
+    @Cacheable(value = "user", key = "#page + '-' + #size")
     public List<SysUser> listUsers(Integer page, Integer size) {
         // 分页查询
         Page<SysUser> sysUserPage = new Page<>(page, size);

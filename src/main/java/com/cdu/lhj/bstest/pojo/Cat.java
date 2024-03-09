@@ -31,6 +31,12 @@ public class Cat {
     private Long categoryId;
 
     /**
+     * 猫咪种类信息
+     */
+    @TableField(exist = false)
+    private CatCategories catCategories;
+
+    /**
      * 猫咪名称
      */
     @TableField(value = "`name`")

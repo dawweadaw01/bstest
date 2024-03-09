@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface ImagesService extends IService<Image>{
 
-    @Transactional
     String saveImage(MultipartFile file, Long id);
 
     List<Image> getImages(Long id);

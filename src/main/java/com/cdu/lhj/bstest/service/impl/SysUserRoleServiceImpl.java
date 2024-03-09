@@ -6,6 +6,8 @@ import com.cdu.lhj.bstest.pojo.SysRole;
 import com.cdu.lhj.bstest.pojo.SysUserRole;
 import com.cdu.lhj.bstest.service.SysUserRoleService;
 import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 
     @Override
     @Transactional
+    @CacheEvict(value = "userRole", key = "#userRole.userId")
     public boolean saveUserRole(SysUserRole userRole) {
         userRole.setId(SimpleTimestampIdGenerator.nextId());
         return save(userRole);
@@ -23,6 +26,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 
     @Override
     @Transactional
+    @CacheEvict(value = "userRole", key = "#userRole.userId")
     public boolean updateUserRole(SysUserRole userRole) {
         return updateById(userRole);
     }
@@ -34,6 +38,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
     }
 
     @Override
+    @Cacheable(value = "userRole", key = "#userId")
     public List<SysRole> getRoleByUserId(Long userId) {
         //调用mapper查询
         return getBaseMapper().getRoleByUserId(userId);

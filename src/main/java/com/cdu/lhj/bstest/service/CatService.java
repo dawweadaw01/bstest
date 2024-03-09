@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface CatService extends IService<Cat>{
 
-
     boolean removeByCatIdAndId( Long catId, Long id);
 
     boolean updateByCatIdAndId(Cat cat, Long id);
