@@ -1,5 +1,6 @@
 package com.cdu.lhj.bstest.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cdu.lhj.bstest.pojo.SysRole;
 
@@ -15,6 +16,6 @@ public interface SysRoleService extends IService<SysRole> {
 
     SysRole getRoleById(Long roleId);
 
-    List<SysRole> listRoles(Integer page, Integer size);
+    IPage<SysRole> listRoles(Integer page, Integer size);
 
 }

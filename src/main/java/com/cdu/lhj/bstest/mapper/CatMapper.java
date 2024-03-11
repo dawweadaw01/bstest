@@ -12,5 +12,5 @@ import java.util.List;
 
 @Mapper
 public interface CatMapper extends BaseMapper<Cat> {
-    List<Cat> getCatListByPage(IPage<?> page, @Param("catDeBo") CatDeBo catDeBo);
+    IPage<Cat> getCatListByPage(IPage<?> page, @Param("catDeBo") CatDeBo catDeBo);
 }

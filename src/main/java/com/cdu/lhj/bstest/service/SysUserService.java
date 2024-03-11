@@ -1,5 +1,6 @@
 package com.cdu.lhj.bstest.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cdu.lhj.bstest.pojo.SysUser;
 
@@ -19,5 +20,5 @@ public interface SysUserService extends IService<SysUser> {
 
     SysUser getUserByName(String username);
 
-    List<SysUser> listUsers(Integer page, Integer size);
+    IPage<SysUser> listUsers(Integer page, Integer size);
 }

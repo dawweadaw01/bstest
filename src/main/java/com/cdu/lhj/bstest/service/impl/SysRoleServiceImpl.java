@@ -1,5 +1,6 @@
 package com.cdu.lhj.bstest.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cdu.lhj.bstest.mapper.SysRoleMapper;
@@ -42,9 +43,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     @Cacheable(value = "roles", key = "#page + '-' + #size")
-    public List<SysRole> listRoles(Integer page, Integer size) {
+    public IPage<SysRole> listRoles(Integer page, Integer size) {
         Page<SysRole> sysRolePage = new Page<>(page, size);
-        return page(sysRolePage).getRecords();
+        return page(sysRolePage);
     }
 
 }

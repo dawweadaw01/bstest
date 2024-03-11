@@ -1,5 +1,6 @@
 package com.cdu.lhj.bstest.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cdu.lhj.bstest.pojo.Bo.CatDeBo;
 import com.cdu.lhj.bstest.pojo.Bo.PageBo;
 import com.cdu.lhj.bstest.pojo.Cat;
@@ -13,7 +14,7 @@ public interface CatService extends IService<Cat>{
 
     boolean updateByCatIdAndId(Cat cat, Long id);
 
-    List<Cat> getCatListByPage(CatDeBo catDeBo);
+    IPage<Cat> getCatListByPage(CatDeBo catDeBo);
 
     Cat getByshopIdAndCatId(Long userIdLong, Long catId);
 }

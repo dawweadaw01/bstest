@@ -1,6 +1,7 @@
 package com.cdu.lhj.bstest.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cdu.lhj.bstest.pojo.Bo.CatCategoriesBo;
 import com.cdu.lhj.bstest.service.ImagesService;
@@ -28,7 +29,7 @@ public class CatCategoriesServiceImpl extends ServiceImpl<CatCategoriesMapper, C
     }
 
     @Override
-    public List<CatCategories> getCatCategoriesListByPage(CatCategoriesBo catCategoriesBo) {
+    public IPage<CatCategories> getCatCategoriesListByPage(CatCategoriesBo catCategoriesBo) {
         // 判断是否有分页信息，没有则赋默认值
         if (catCategoriesBo.getPage() == null) {
             catCategoriesBo.setPage(1);
@@ -37,8 +38,8 @@ public class CatCategoriesServiceImpl extends ServiceImpl<CatCategoriesMapper, C
             catCategoriesBo.setSize(10);
         }
         Page<CatCategories> catCategoriesPage = new Page<>(catCategoriesBo.getPage(), catCategoriesBo.getSize());
-        List<CatCategories> records = this.baseMapper.selectPage(catCategoriesPage, null).getRecords();
-        records.forEach(catCategories -> catCategories.setImages(imagesService.getImages(catCategories.getCategoryId())));
+        IPage<CatCategories> records = this.baseMapper.selectPage(catCategoriesPage, null);
+        records.getRecords().forEach(catCategories -> catCategories.setImages(imagesService.getImages(catCategories.getCategoryId())));
         return records;
     }
 }

@@ -1,5 +1,6 @@
 package com.cdu.lhj.bstest.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cdu.lhj.bstest.pojo.Bo.CatCategoriesBo;
 import com.cdu.lhj.bstest.pojo.CatCategories;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -10,5 +11,5 @@ public interface CatCategoriesService extends IService<CatCategories>{
 
     CatCategories getCatCategoriesById(Long id);
 
-    List<CatCategories> getCatCategoriesListByPage(CatCategoriesBo catCategoriesBo);
+    IPage<CatCategories> getCatCategoriesListByPage(CatCategoriesBo catCategoriesBo);
 }

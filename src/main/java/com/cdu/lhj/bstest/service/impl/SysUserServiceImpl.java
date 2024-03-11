@@ -2,6 +2,7 @@ package com.cdu.lhj.bstest.service.impl;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cdu.lhj.bstest.mapper.SysUserMapper;
@@ -60,10 +61,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     @Cacheable(value = "user", key = "#page + '-' + #size")
-    public List<SysUser> listUsers(Integer page, Integer size) {
+    public IPage<SysUser> listUsers(Integer page, Integer size) {
         // 分页查询
         Page<SysUser> sysUserPage = new Page<>(page, size);
-        return page(sysUserPage).getRecords();
+        return page(sysUserPage);
     }
 
 }

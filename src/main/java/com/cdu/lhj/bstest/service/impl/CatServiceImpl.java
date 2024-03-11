@@ -1,6 +1,7 @@
 package com.cdu.lhj.bstest.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cdu.lhj.bstest.pojo.Bo.CatDeBo;
 import com.cdu.lhj.bstest.pojo.Bo.PageBo;
@@ -36,15 +37,15 @@ public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatSe
     }
 
     @Override
-    public List<Cat> getCatListByPage(CatDeBo catDeBo) {
+    public IPage<Cat> getCatListByPage(CatDeBo catDeBo) {
         // 构造分页参数
         Page<Cat> page = new Page<>(catDeBo.getPageBo().getPage(), catDeBo.getPageBo().getSize());
         // 调用mapper查询
-        List<Cat> listByPage = this.baseMapper.getCatListByPage(page, catDeBo);
+        IPage<Cat> listByPage = this.baseMapper.getCatListByPage(page, catDeBo);
         // 循环查询分类
-        listByPage.forEach(cat -> cat.setCatCategories(catCategoriesService.getCatCategoriesById(cat.getCategoryId())));
+        listByPage.getRecords().forEach(cat -> cat.setCatCategories(catCategoriesService.getCatCategoriesById(cat.getCategoryId())));
         // 循环查询图片
-        listByPage.forEach(cat -> cat.setImages(imagesService.getImages(cat.getCatId())));
+        listByPage.getRecords().forEach(cat -> cat.setImages(imagesService.getImages(cat.getCatId())));
         return listByPage;
     }
 

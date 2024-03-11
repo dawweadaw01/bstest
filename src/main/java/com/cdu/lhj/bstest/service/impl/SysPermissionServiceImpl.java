@@ -1,5 +1,6 @@
 package com.cdu.lhj.bstest.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cdu.lhj.bstest.mapper.SysPermissionMapper;
@@ -47,8 +48,8 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
 
     @Override
     @Cacheable(value = "permissions", key = "#page + '-' + #size")
-    public List<SysPermission> listPermissions(Integer page, Integer size) {
+    public IPage<SysPermission> listPermissions(Integer page, Integer size) {
         Page<SysPermission> sysPermissionPage = new Page<>(page, size);
-        return page(sysPermissionPage).getRecords();
+        return page(sysPermissionPage);
     }
 }

@@ -1,5 +1,6 @@
 package com.cdu.lhj.bstest.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cdu.lhj.bstest.pojo.SysPermission;
 
@@ -15,5 +16,5 @@ public interface SysPermissionService extends IService<SysPermission> {
 
     SysPermission getPermissionById(Long permissionId);
 
-    List<SysPermission> listPermissions(Integer page, Integer size);
+    IPage<SysPermission> listPermissions(Integer page, Integer size);
 }
