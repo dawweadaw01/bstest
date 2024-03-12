@@ -12,7 +12,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/catCategories")
+@RequestMapping("/api/catCategories")
 public class CatCategoriesController {
 
     @Resource

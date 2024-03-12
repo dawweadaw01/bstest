@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/sysRole")
+@RequestMapping("/api/sysRole")
 @SaCheckPermission(value = {"admin"}, orRole = "super-admin")
 public class SysRoleController {
     @Resource

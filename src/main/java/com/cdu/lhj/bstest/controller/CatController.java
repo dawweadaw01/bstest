@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/cat")
+@RequestMapping("/api/cat")
 @SaCheckRole(value ={"shop","super-admin","admin"}, mode = SaMode.OR)
 public class CatController {
 

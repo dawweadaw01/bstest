@@ -10,7 +10,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/sysRolePermission")
+@RequestMapping("/api/sysRolePermission")
 @SaCheckPermission(value = {"admin"}, orRole = "super-admin")
 public class SysRolePermissionController {
 
