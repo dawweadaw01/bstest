@@ -16,7 +16,6 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/images")
 public class ImagesController {
-    // todo 根据shopid和猫咪id来进行图片的上传，实现猫咪图片的上传
     @Resource
     private ImagesService imagesService;
 

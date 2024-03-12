@@ -14,7 +14,7 @@ import java.time.Duration;
 
 @Configuration
 public class RedisConfig {
-    @Bean
+    @Bean(name = "redisTemplate")
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
