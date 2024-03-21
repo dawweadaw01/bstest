@@ -12,6 +12,48 @@
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, username, `password`, email, phone
+        id,
+        username,
+        `password`,
+        email,
+        phone
     </sql>
+
+    <select id="listUsers" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select id,
+               username,
+               email,
+               phone
+        from sys_user
+        <where>
+            <if test="userSearchBo.username != null and userSearchBo.username != ''">
+            and username like concat('%', #{userSearchBo.username}, '%')
+            </if>
+            <if test="userSearchBo.phone != null and userSearchBo.phone != ''">
+            and phone like concat('%', #{userSearchBo.phone}, '%')
+            </if>
+        </where>
+    </select>
+
+    <update id="updateUser">
+        <!--@mbg.generated-->
+        update sys_user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                `password` = #{password},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+        </set>
+
+        where id = #{id}
+    </update>
 </mapper>

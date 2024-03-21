@@ -3,14 +3,11 @@ package com.cdu.lhj.bstest.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
-import com.cdu.lhj.bstest.pojo.User;
+import com.cdu.lhj.bstest.pojo.Bo.UserBo;
 import com.cdu.lhj.bstest.service.TestService;
-import com.cdu.lhj.bstest.util.TencentCOSUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -33,9 +30,9 @@ public class TestController {
 
     // 会话登录接口
     @RequestMapping(value = "doLogin", produces = "application/json")
-    public SaResult doLogin(@RequestBody User user) {
+    public SaResult doLogin(@RequestBody UserBo userBo) {
         // 第一步：比对前端提交的账号名称、密码
-        if ("zhang".equals(user.getName()) && "123456".equals(user.getPwd())) {
+        if ("zhang".equals(userBo.getName()) && "123456".equals(userBo.getPwd())) {
             // 第二步：根据账号id，进行登录
             StpUtil.login(10001);
             return SaResult.ok(StpUtil.getTokenValue());

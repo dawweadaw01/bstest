@@ -1,10 +1,10 @@
-package com.cdu.lhj.bstest.pojo;
+package com.cdu.lhj.bstest.pojo.Bo;
 
 
 import lombok.Data;
 
 @Data
-public class User {
+public class UserBo {
     private String name;
     private String pwd;
 }

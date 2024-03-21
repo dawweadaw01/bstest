@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cdu.lhj.bstest.mapper.SysUserMapper;
 import com.cdu.lhj.bstest.pojo.Bo.LoginSmsBo;
+import com.cdu.lhj.bstest.pojo.Bo.UserSearchBo;
 import com.cdu.lhj.bstest.pojo.SysUser;
 import com.cdu.lhj.bstest.service.SysUserService;
 import com.cdu.lhj.bstest.util.RedisUtil;
@@ -32,7 +33,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     @Transactional
-    @CacheEvict(value = "user", key = "#user.username")
+    @CacheEvict(value = "user", allEntries = true)
     public boolean saveUser(SysUser user) {
         user.setPassword(SaSecureUtil.md5(user.getPassword()));
         user.setId(SimpleTimestampIdGenerator.nextId());
@@ -41,14 +42,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     @Transactional
-    @CacheEvict(value = "user", key = "#user.username")
+    @CacheEvict(value = "user", allEntries = true)
     public boolean updateUser(SysUser user) {
-        user.setPassword(SaSecureUtil.md5(user.getPassword()));
-        return updateById(user);
+        if(user.getPassword() != null){
+            user.setPassword(SaSecureUtil.md5(user.getPassword()));
+        }
+        return this.baseMapper.updateUser(user);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = "user", allEntries = true)
     public boolean deleteUser(Long userId) {
         return removeById(userId);
     }
@@ -66,11 +70,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    @Cacheable(value = "user", key = "#page + '-' + #size")
-    public IPage<SysUser> listUsers(Integer page, Integer size) {
+    public SysUser getUserByPhone(String phone) {
+        LambdaQueryWrapper<SysUser> eq = new LambdaQueryWrapper<SysUser>().eq(SysUser::getPhone, phone);
+
+        return getOne(eq);
+    }
+
+    @Override
+    @Cacheable(value = "user", key = "#userSearchBo.username + '-' + #userSearchBo.phone + '-' + #userSearchBo.page + '-' + #userSearchBo.size")
+    public IPage<SysUser> listUsers(UserSearchBo userSearchBo) {
         // 分页查询
-        Page<SysUser> sysUserPage = new Page<>(page, size);
-        return page(sysUserPage);
+        Page<SysUser> sysUserPage = new Page<>(userSearchBo.getPage(), userSearchBo.getSize());
+        // 查询条件
+        return this.baseMapper.listUsers(sysUserPage, userSearchBo);
     }
 
     @Override

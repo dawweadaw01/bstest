@@ -8,8 +8,9 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.cdu.lhj.bstest.pojo.Bo.LoginSmsBo;
 import com.cdu.lhj.bstest.pojo.Bo.SmsBo;
+import com.cdu.lhj.bstest.pojo.Bo.UserSearchBo;
 import com.cdu.lhj.bstest.pojo.SysUser;
-import com.cdu.lhj.bstest.pojo.User;
+import com.cdu.lhj.bstest.pojo.Bo.UserBo;
 import com.cdu.lhj.bstest.service.SendSms;
 import com.cdu.lhj.bstest.service.SysUserService;
 import jakarta.annotation.Resource;
@@ -57,14 +58,14 @@ public class SysUserController {
     }
 
     @PostMapping("/doLogin")
-    public SaResult doLogin(@RequestBody User user) {
+    public SaResult doLogin(@RequestBody UserBo userBo) {
         // 判空
-        if (StrUtil.isEmpty(user.getName()) || StrUtil.isEmpty(user.getPwd())) {
+        if (StrUtil.isEmpty(userBo.getName()) || StrUtil.isEmpty(userBo.getPwd())) {
             return SaResult.error("用户名或者密码不能为空");
         }
         // 进行登录
         try {
-            SysUser sysUser = sysUserService.doLogin(user.getName(), SaSecureUtil.md5(user.getPwd()));
+            SysUser sysUser = sysUserService.doLogin(userBo.getName(), SaSecureUtil.md5(userBo.getPwd()));
             if (sysUser != null) {
                 StpUtil.login(sysUser.getId());
                 return SaResult.data(StpUtil.getTokenValue());
@@ -90,20 +91,21 @@ public class SysUserController {
 
     @SaCheckPermission(value = {"admin"}, orRole = "super-admin")
     @PostMapping("/delete")
-    public SaResult delete() {
+    public SaResult delete(@RequestParam Long id) {
         // 拿到当前登录用户的id
-        Long id = StpUtil.getLoginIdAsLong();
         return SaResult.data(sysUserService.deleteUser(id));
     }
 
     @SaCheckPermission(value = {"admin"}, orRole = "super-admin")
     @PostMapping("/update")
     public SaResult update(@RequestBody SysUser user) {
-        // 进行判空操作
-        if (StrUtil.isEmpty(user.getUsername()) || StrUtil.isEmpty(user.getPassword())) {
-            return SaResult.error("参数不能为空");
+        // 如果说name没有更改，那么久改为空免得出现重复
+        if (sysUserService.getUserByName(user.getUsername()) != null) {
+            user.setUsername(null);
         }
-        user.setId(StpUtil.getLoginIdAsLong());
+        if (sysUserService.getUserByPhone(user.getPhone()) != null) {
+            user.setUsername(null);
+        }
         return SaResult.data(sysUserService.updateUser(user));
     }
 
@@ -115,8 +117,14 @@ public class SysUserController {
     }
 
     @SaCheckPermission(value = {"admin"}, orRole = "super-admin")
-    @GetMapping("/list")
-    public SaResult list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
-        return SaResult.data(sysUserService.listUsers(page, size));
+    @PostMapping("/list")
+    public SaResult list(@RequestBody UserSearchBo userSearchBo) {
+        if(userSearchBo.getPage() == null || userSearchBo.getPage() < 1){
+            userSearchBo.setPage(1);
+        }
+        if (userSearchBo.getSize() == null || userSearchBo.getSize() < 1){
+            userSearchBo.setSize(10);
+        }
+        return SaResult.data(sysUserService.listUsers(userSearchBo));
     }
 }
