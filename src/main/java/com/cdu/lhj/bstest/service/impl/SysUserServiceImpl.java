@@ -9,6 +9,7 @@ import com.cdu.lhj.bstest.mapper.SysUserMapper;
 import com.cdu.lhj.bstest.pojo.Bo.LoginSmsBo;
 import com.cdu.lhj.bstest.pojo.Bo.UserSearchBo;
 import com.cdu.lhj.bstest.pojo.SysUser;
+import com.cdu.lhj.bstest.service.SysUserRoleService;
 import com.cdu.lhj.bstest.service.SysUserService;
 import com.cdu.lhj.bstest.util.RedisUtil;
 import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
@@ -18,13 +19,15 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     @Resource
     private RedisUtil redisUtil;
+
+    @Resource
+    private SysUserRoleService sysUserRoleService;
+
     @Override
     public SysUser doLogin(String username, String password) {
         LambdaQueryWrapper<SysUser> eq = new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username).eq(SysUser::getPassword, password);
@@ -44,7 +47,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Transactional
     @CacheEvict(value = "user", allEntries = true)
     public boolean updateUser(SysUser user) {
-        if(user.getPassword() != null){
+        if (user.getPassword() != null) {
             user.setPassword(SaSecureUtil.md5(user.getPassword()));
         }
         return this.baseMapper.updateUser(user);
@@ -82,7 +85,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 分页查询
         Page<SysUser> sysUserPage = new Page<>(userSearchBo.getPage(), userSearchBo.getSize());
         // 查询条件
-        return this.baseMapper.listUsers(sysUserPage, userSearchBo);
+        IPage<SysUser> sysUserIPage = this.baseMapper.listUsers(sysUserPage, userSearchBo);
+        for (SysUser sysUser : sysUserIPage.getRecords()) {
+            sysUser.setPassword(null);
+            // 查询roles
+            StringBuffer stringBuffer = new StringBuffer();
+            sysUserRoleService.getRoleByUserId(sysUser.getId()).forEach(sysRole -> stringBuffer.append("-").append(sysRole.getName()));
+            sysUser.setRoles(stringBuffer.substring(1));
+        }
+        return sysUserIPage;
     }
 
     @Override
@@ -90,13 +101,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 根据手机号查询用户
         LambdaQueryWrapper<SysUser> eq = new LambdaQueryWrapper<SysUser>().eq(SysUser::getPhone, loginSmsBo.getPhoneNum());
         SysUser sysUser = getOne(eq);
-        if(sysUser == null){
+        if (sysUser == null) {
             throw new RuntimeException("手机号未注册");
         }
         boolean hasKey = redisUtil.hasKey("code:" + loginSmsBo.getPhoneNum());
         if (!hasKey) {
             throw new RuntimeException("验证码已过期");
-        }else {
+        } else {
             String code = (String) redisUtil.get("code:" + loginSmsBo.getPhoneNum());
             if (!code.equals(loginSmsBo.getCode())) {
                 throw new RuntimeException("验证码错误");

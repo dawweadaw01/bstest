@@ -27,4 +27,7 @@ public class SysUser {
 
     @TableField(value = "phone")
     private String phone;
+
+    @TableField(exist = false)
+    private String roles;
 }

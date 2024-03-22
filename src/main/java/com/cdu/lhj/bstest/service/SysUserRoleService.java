@@ -16,4 +16,6 @@ public interface SysUserRoleService extends IService<SysUserRole> {
     boolean deleteUserRole(Long userRoleId);
 
     List<SysRole> getRoleByUserId(Long userId);
+
+    List<String> getUserByRole(Long id);
 }

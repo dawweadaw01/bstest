@@ -1,6 +1,7 @@
 package com.cdu.lhj.bstest.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.cdu.lhj.bstest.pojo.SysUserRole;
 import com.cdu.lhj.bstest.service.SysRoleService;
@@ -65,6 +66,14 @@ public class SysUserRoleController {
             return SaResult.error("参数不能为空");
         }
         return SaResult.data(sysUserRoleService.getRoleByUserId(userId));
+    }
+
+    @GetMapping("/getUserRole")
+    public SaResult getUserByRole() {
+        // 拿到id
+        long id = StpUtil.getLoginIdAsLong();
+        // 进行判空操作
+        return SaResult.data(sysUserRoleService.getUserByRole(id));
     }
 
 }

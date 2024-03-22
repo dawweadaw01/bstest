@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,5 +43,15 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
     public List<SysRole> getRoleByUserId(Long userId) {
         //调用mapper查询
         return getBaseMapper().getRoleByUserId(userId);
+    }
+
+    @Override
+    public List<String> getUserByRole(Long id) {
+        List<SysRole> roles = getBaseMapper().getRoleByUserId(id);
+        List<String> strings = new ArrayList<>();
+        for (SysRole role : roles) {
+            strings.add(role.getName());
+        }
+        return strings;
     }
 }
