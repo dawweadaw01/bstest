@@ -12,4 +12,18 @@
         <!--@mbg.generated-->
         id, `name`, description
     </sql>
+
+    <select id="getRoleBySearch" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+        <where>
+            <if test="roleSearchBo.name != null and roleSearchBo.name != ''">
+                and name like concat('%',#{roleSearchBo.name},'%')
+            </if>
+            <if test="roleSearchBo.description != null and roleSearchBo.description != ''">
+                and description like concat('%',#{roleSearchBo.description},'%')
+            </if>
+        </where>
+    </select>
 </mapper>

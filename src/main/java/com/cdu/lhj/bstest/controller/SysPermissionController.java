@@ -3,13 +3,11 @@ package com.cdu.lhj.bstest.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.StrUtil;
+import com.cdu.lhj.bstest.pojo.Bo.PermissionSearchBo;
 import com.cdu.lhj.bstest.pojo.SysPermission;
 import com.cdu.lhj.bstest.service.SysPermissionService;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @SaCheckPermission(value = {"admin"}, orRole = "super-admin")
@@ -26,7 +24,11 @@ public class SysPermissionController {
         if (StrUtil.isEmpty(sysPermission.getName())) {
             return SaResult.error("名字不能为空");
         }
-        return SaResult.data(sysPermissionService.savePermission(sysPermission));
+        if(sysPermissionService.savePermission(sysPermission)){
+            return SaResult.data(sysPermission);
+        }else {
+            return SaResult.error("权限名已存在");
+        }
     }
 
     @PostMapping("/delete")
@@ -56,13 +58,14 @@ public class SysPermissionController {
         return SaResult.data(sysPermissionService.getPermissionById(permissionId));
     }
 
-    @PostMapping("/list")
-    public SaResult list(Integer page, Integer size) {
+    @GetMapping("/list")
+    public SaResult list() {
         // 进行判空操作
-        if (page == null || size == null) {
-            return SaResult.error("参数不能为空");
-        }
-        return SaResult.data(sysPermissionService.listPermissions(page, size));
+        return SaResult.data(sysPermissionService.listPermissions());
     }
 
+    @PostMapping("/getPermissionBySearch")
+    public SaResult getPermissionBySearch(@RequestBody PermissionSearchBo permissionSearchBo) {
+        return SaResult.data(sysPermissionService.getPermissionBySearch(permissionSearchBo));
+    }
 }

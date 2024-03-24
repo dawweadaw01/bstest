@@ -2,12 +2,17 @@ package com.cdu.lhj.bstest.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.util.SaResult;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cdu.lhj.bstest.pojo.Bo.RoleSearchBo;
 import com.cdu.lhj.bstest.pojo.SysRolePermission;
+import com.cdu.lhj.bstest.pojo.Vo.RoleSearchVo;
 import com.cdu.lhj.bstest.service.SysPermissionService;
 import com.cdu.lhj.bstest.service.SysRolePermissionService;
 import com.cdu.lhj.bstest.service.SysRoleService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/sysRolePermission")
@@ -23,6 +28,7 @@ public class SysRolePermissionController {
     @Resource
     private SysPermissionService sysPermissionService;
 
+
     @PostMapping("/insert")
     public SaResult insert(@RequestBody SysRolePermission rolePermission) {
         // 进行判空操作
@@ -33,11 +39,15 @@ public class SysRolePermissionController {
         if (sysRoleService.getById(rolePermission.getRoleId()) == null || sysPermissionService.getById(rolePermission.getPermissionId()) == null) {
             return SaResult.error("角色或权限不存在");
         }
-        return SaResult.data(sysRolePermissionService.saveRolePermission(rolePermission));
+        if(sysRolePermissionService.saveRolePermission(rolePermission)){
+            return SaResult.data(rolePermission);
+        }else {
+            return SaResult.error("角色已经拥有该权限,请勿重复添加");
+        }
     }
 
     @PostMapping("/delete")
-    public SaResult delete(Long rolePermissionId) {
+    public SaResult delete(@RequestParam Long rolePermissionId) {
         // 进行判空操作
         if (rolePermissionId == null) {
             return SaResult.error("参数不能为空");
@@ -67,4 +77,12 @@ public class SysRolePermissionController {
         return SaResult.data(sysRolePermissionService.getPermissionByRoleId(roleId));
     }
 
+    @PostMapping("/getPermissionListForManager")
+    public SaResult getPermissionListForManager(@RequestParam Long roleId) {
+        // 进行判空操作
+        if (roleId == null) {
+            return SaResult.error("参数不能为空");
+        }
+        return SaResult.data(sysRolePermissionService.getPermissionListForManager(roleId));
+    }
 }

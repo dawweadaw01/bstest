@@ -3,6 +3,7 @@ package com.cdu.lhj.bstest.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cdu.lhj.bstest.pojo.SysRole;
 import com.cdu.lhj.bstest.pojo.SysUserRole;
+import com.cdu.lhj.bstest.pojo.Vo.SysUserRoleVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -10,4 +11,6 @@ import java.util.List;
 @Mapper
 public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
     List<SysRole> getRoleByUserId(Long userId);
+
+    List<SysUserRoleVo> getByUserFormManager(Long userId);
 }

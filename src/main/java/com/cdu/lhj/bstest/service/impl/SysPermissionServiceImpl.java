@@ -1,9 +1,11 @@
 package com.cdu.lhj.bstest.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cdu.lhj.bstest.mapper.SysPermissionMapper;
+import com.cdu.lhj.bstest.pojo.Bo.PermissionSearchBo;
 import com.cdu.lhj.bstest.pojo.SysPermission;
 import com.cdu.lhj.bstest.service.SysPermissionService;
 import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
@@ -23,6 +25,10 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     @CacheEvict(value = "permissions", allEntries = true)
     public boolean savePermission(SysPermission permission) {
         permission.setId(SimpleTimestampIdGenerator.nextId());
+        LambdaQueryWrapper<SysPermission> eq = new LambdaQueryWrapper<SysPermission>().eq(SysPermission::getName, permission.getName());
+        if(getOne(eq) != null){
+            return false;
+        }
         return save(permission);
     }
 
@@ -30,6 +36,12 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     @Transactional
     @CacheEvict(value = "permissions", allEntries = true)
     public boolean updatePermission(SysPermission permission) {
+        if(permission.getName() != null){
+            LambdaQueryWrapper<SysPermission> eq = new LambdaQueryWrapper<SysPermission>().eq(SysPermission::getName, permission.getName());
+            if(getOne(eq) != null){
+                permission.setName(null);
+            }
+        }
         return updateById(permission);
     }
 
@@ -47,9 +59,17 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     }
 
     @Override
-    @Cacheable(value = "permissions", key = "#page + '-' + #size")
-    public IPage<SysPermission> listPermissions(Integer page, Integer size) {
-        Page<SysPermission> sysPermissionPage = new Page<>(page, size);
-        return page(sysPermissionPage);
+    @Cacheable(value = "permissions")
+    public List<SysPermission> listPermissions() {
+        return list();
+    }
+
+    @Override
+    public IPage<SysPermission> getPermissionBySearch(PermissionSearchBo permissionSearchBo) {
+        Page<SysPermission> page = new Page<>(permissionSearchBo.getPage(), permissionSearchBo.getSize());
+        LambdaQueryWrapper<SysPermission> eq = new LambdaQueryWrapper<SysPermission>()
+                .like(permissionSearchBo.getName() != null, SysPermission::getName, permissionSearchBo.getName())
+                .like(permissionSearchBo.getDescription() != null, SysPermission::getDescription, permissionSearchBo.getDescription());
+        return page(page, eq);
     }
 }

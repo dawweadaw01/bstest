@@ -2,7 +2,9 @@ package com.cdu.lhj.bstest.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cdu.lhj.bstest.pojo.Bo.RoleSearchBo;
 import com.cdu.lhj.bstest.pojo.SysRole;
+import com.cdu.lhj.bstest.pojo.Vo.RoleSearchVo;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ public interface SysRoleService extends IService<SysRole> {
 
     SysRole getRoleById(Long roleId);
 
-    IPage<SysRole> listRoles(Integer page, Integer size);
+    List<SysRole> listRoles();
 
+    IPage<SysRole> getRoleBySearch(RoleSearchBo roleSearchBo);
 }

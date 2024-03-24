@@ -21,4 +21,7 @@ public class SysRole {
 
     @TableField(value = "description")
     private String description;
+
+    @TableField(exist = false)
+    private String permissions;
 }

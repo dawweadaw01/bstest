@@ -34,7 +34,11 @@ public class SysUserRoleController {
         if (sysUserService.getById(userRole.getUserId()) == null || sysRoleService.getById(userRole.getRoleId()) == null) {
             return SaResult.error("用户或角色不存在");
         }
-        return SaResult.data(sysUserRoleService.saveUserRole(userRole));
+        if(sysUserRoleService.saveUserRole(userRole)){
+            return SaResult.data(userRole);
+        }else {
+            return SaResult.error("用户已经拥有该角色,请勿重复添加");
+        }
     }
 
     @PostMapping("/delete")
@@ -68,12 +72,21 @@ public class SysUserRoleController {
         return SaResult.data(sysUserRoleService.getRoleByUserId(userId));
     }
 
+    @GetMapping("/getByUserFormManager")
+    public SaResult getByUserFormManager(@RequestParam Long userId) {
+        if (userId == null) {
+            return SaResult.error("参数不能为空");
+        }
+        // 进行判空操作
+        return SaResult.data(sysUserRoleService.getByUserFormManager(userId));
+    }
+
     @GetMapping("/getUserRole")
     public SaResult getUserByRole() {
         // 拿到id
         long id = StpUtil.getLoginIdAsLong();
         // 进行判空操作
-        return SaResult.data(sysUserRoleService.getUserByRole(id));
+        return SaResult.data(sysUserRoleService.getRoleByUser(id));
     }
 
 }

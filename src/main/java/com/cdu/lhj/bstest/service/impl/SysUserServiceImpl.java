@@ -91,7 +91,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             // 查询roles
             StringBuffer stringBuffer = new StringBuffer();
             sysUserRoleService.getRoleByUserId(sysUser.getId()).forEach(sysRole -> stringBuffer.append("-").append(sysRole.getName()));
-            sysUser.setRoles(stringBuffer.substring(1));
+            if(!stringBuffer.isEmpty()){
+                sysUser.setRoles(stringBuffer.substring(1));
+            }else {
+                sysUser.setRoles("");
+            }
         }
         return sysUserIPage;
     }

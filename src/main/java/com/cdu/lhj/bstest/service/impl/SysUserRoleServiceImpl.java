@@ -1,9 +1,11 @@
 package com.cdu.lhj.bstest.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cdu.lhj.bstest.mapper.SysUserRoleMapper;
 import com.cdu.lhj.bstest.pojo.SysRole;
 import com.cdu.lhj.bstest.pojo.SysUserRole;
+import com.cdu.lhj.bstest.pojo.Vo.SysUserRoleVo;
 import com.cdu.lhj.bstest.service.SysUserRoleService;
 import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
 import org.springframework.cache.annotation.CacheEvict;
@@ -19,21 +21,28 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 
     @Override
     @Transactional
-    @CacheEvict(value = "userRole", key = "#userRole.userId")
+    @CacheEvict(value = "userRole", allEntries = true)
     public boolean saveUserRole(SysUserRole userRole) {
         userRole.setId(SimpleTimestampIdGenerator.nextId());
+        LambdaQueryWrapper<SysUserRole> eq = new LambdaQueryWrapper<SysUserRole>().
+                eq(SysUserRole::getUserId, userRole.getUserId()).eq(SysUserRole::getRoleId, userRole.getRoleId());
+        SysUserRole one = getOne(eq);
+        if(one != null){
+            return false;
+        }
         return save(userRole);
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = "userRole", key = "#userRole.userId")
+    @CacheEvict(value = "userRole", allEntries = true)
     public boolean updateUserRole(SysUserRole userRole) {
         return updateById(userRole);
     }
 
     @Override
     @Transactional
+    @CacheEvict(value = "userRole", allEntries = true)
     public boolean deleteUserRole(Long userRoleId) {
         return removeById(userRoleId);
     }
@@ -46,12 +55,18 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
     }
 
     @Override
-    public List<String> getUserByRole(Long id) {
+    public List<String> getRoleByUser(Long id) {
         List<SysRole> roles = getBaseMapper().getRoleByUserId(id);
         List<String> strings = new ArrayList<>();
         for (SysRole role : roles) {
             strings.add(role.getName());
         }
         return strings;
+    }
+
+    @Override
+    public List<SysUserRoleVo> getByUserFormManager(Long userId) {
+        return getBaseMapper().getByUserFormManager(userId);
+
     }
 }

@@ -4,7 +4,10 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cdu.lhj.bstest.pojo.Bo.RoleSearchBo;
 import com.cdu.lhj.bstest.pojo.SysRole;
+import com.cdu.lhj.bstest.pojo.Vo.RoleSearchVo;
 import com.cdu.lhj.bstest.service.SysRoleService;
 import jakarta.annotation.Resource;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,12 @@ public class SysRoleController {
             return SaResult.error("参数不能为空");
         }
         return SaResult.data(sysRoleService.saveRole(role));
+    }
+
+    @PostMapping(value = "/getRoleBySearch")
+    public SaResult getRoleBySearch(@RequestBody RoleSearchBo roleSearchBo) {
+        IPage<SysRole> searchVos =  sysRoleService.getRoleBySearch(roleSearchBo);
+        return SaResult.data(searchVos);
     }
 
     @PostMapping("/delete")
@@ -59,8 +68,7 @@ public class SysRoleController {
     }
 
     @GetMapping("/list")
-    public SaResult list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
-        return SaResult.data(sysRoleService.listRoles(page, size));
+    public SaResult list() {
+        return SaResult.data(sysRoleService.listRoles());
     }
-
 }

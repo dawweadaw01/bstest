@@ -17,4 +17,11 @@
         left join sys_permission p on rp.permission_id = p.id
         where rp.role_id = #{roleId}
     </select>
+
+    <select id="getPermissionListForManager" resultType="com.cdu.lhj.bstest.pojo.SysPermission">
+        select rp.id, p.name, p.description, p.url, p.method
+        from sys_role_permission rp
+        left join sys_permission p on rp.permission_id = p.id
+        where rp.role_id = #{roleId}
+    </select>
 </mapper>
