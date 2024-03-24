@@ -1,19 +1,12 @@
 package com.cdu.lhj.bstest.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cdu.lhj.bstest.mapper.SysRolePermissionMapper;
-import com.cdu.lhj.bstest.pojo.Bo.RoleSearchBo;
 import com.cdu.lhj.bstest.pojo.SysPermission;
 import com.cdu.lhj.bstest.pojo.SysRolePermission;
-import com.cdu.lhj.bstest.pojo.Vo.RoleSearchVo;
-import com.cdu.lhj.bstest.service.SysPermissionService;
 import com.cdu.lhj.bstest.service.SysRolePermissionService;
-import com.cdu.lhj.bstest.service.SysRoleService;
 import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
-import jakarta.annotation.Resource;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

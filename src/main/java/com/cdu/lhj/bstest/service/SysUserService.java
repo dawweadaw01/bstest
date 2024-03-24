@@ -6,8 +6,6 @@ import com.cdu.lhj.bstest.pojo.Bo.LoginSmsBo;
 import com.cdu.lhj.bstest.pojo.Bo.UserSearchBo;
 import com.cdu.lhj.bstest.pojo.SysUser;
 
-import java.util.List;
-
 public interface SysUserService extends IService<SysUser> {
 
     SysUser doLogin(String username, String password);

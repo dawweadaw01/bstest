@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;import java.util.List;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * 猫咪种类信息表，存储各种猫咪的种类信息

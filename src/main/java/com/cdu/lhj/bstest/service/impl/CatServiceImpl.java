@@ -3,18 +3,15 @@ package com.cdu.lhj.bstest.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cdu.lhj.bstest.mapper.CatMapper;
 import com.cdu.lhj.bstest.pojo.Bo.CatDeBo;
-import com.cdu.lhj.bstest.pojo.Bo.PageBo;
+import com.cdu.lhj.bstest.pojo.Cat;
 import com.cdu.lhj.bstest.service.CatCategoriesService;
+import com.cdu.lhj.bstest.service.CatService;
 import com.cdu.lhj.bstest.service.ImagesService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cdu.lhj.bstest.pojo.Cat;
-import com.cdu.lhj.bstest.mapper.CatMapper;
-import com.cdu.lhj.bstest.service.CatService;
 @Service
 public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatService{
 

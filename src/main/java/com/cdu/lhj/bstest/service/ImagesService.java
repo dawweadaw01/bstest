@@ -1,8 +1,7 @@
 package com.cdu.lhj.bstest.service;
 
-import com.cdu.lhj.bstest.pojo.Image;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.transaction.annotation.Transactional;
+import com.cdu.lhj.bstest.pojo.Image;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

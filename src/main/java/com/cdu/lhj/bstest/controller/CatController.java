@@ -14,8 +14,6 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Objects;
-
 @RestController
 @RequestMapping("/api/cat")
 @SaCheckRole(value ={"shop","super-admin","admin"}, mode = SaMode.OR)

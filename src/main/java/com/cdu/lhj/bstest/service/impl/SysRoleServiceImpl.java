@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cdu.lhj.bstest.mapper.SysRoleMapper;
 import com.cdu.lhj.bstest.pojo.Bo.RoleSearchBo;
 import com.cdu.lhj.bstest.pojo.SysRole;
-import com.cdu.lhj.bstest.pojo.Vo.RoleSearchVo;
 import com.cdu.lhj.bstest.service.SysRolePermissionService;
 import com.cdu.lhj.bstest.service.SysRoleService;
 import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;

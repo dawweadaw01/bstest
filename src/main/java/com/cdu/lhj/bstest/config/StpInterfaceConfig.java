@@ -4,7 +4,6 @@ import cn.dev33.satoken.stp.StpInterface;
 import com.cdu.lhj.bstest.pojo.SysRole;
 import com.cdu.lhj.bstest.service.SysRolePermissionService;
 import com.cdu.lhj.bstest.service.SysUserRoleService;
-import com.cdu.lhj.bstest.service.SysUserService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cdu.lhj.bstest.pojo.Bo.RoleSearchBo;
 import com.cdu.lhj.bstest.pojo.SysRole;
-import com.cdu.lhj.bstest.pojo.Vo.RoleSearchVo;
 
 import java.util.List;
 
