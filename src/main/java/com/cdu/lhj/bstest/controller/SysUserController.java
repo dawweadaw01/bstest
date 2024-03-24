@@ -16,6 +16,9 @@ import com.cdu.lhj.bstest.service.SysUserService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/sysUser")
 public class SysUserController {
@@ -66,9 +69,13 @@ public class SysUserController {
         // 进行登录
         try {
             SysUser sysUser = sysUserService.doLogin(userBo.getName(), SaSecureUtil.md5(userBo.getPwd()));
+
             if (sysUser != null) {
                 StpUtil.login(sysUser.getId());
-                return SaResult.data(StpUtil.getTokenValue());
+                Map<Object, Object> map = new HashMap<>();
+                map.put("token", StpUtil.getTokenValue());
+                map.put("expire", StpUtil.getTokenTimeout()/86400);
+                return SaResult.data(map);
             } else {
                 return SaResult.error("用户名或者密码错误");
             }
