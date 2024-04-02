@@ -1,15 +1,13 @@
 package com.cdu.lhj.bstest.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import com.cdu.lhj.bstest.pojo.Bo.LoginSmsBo;
-import com.cdu.lhj.bstest.pojo.Bo.SmsBo;
-import com.cdu.lhj.bstest.pojo.Bo.UserBo;
-import com.cdu.lhj.bstest.pojo.Bo.UserSearchBo;
+import com.cdu.lhj.bstest.pojo.Bo.*;
 import com.cdu.lhj.bstest.pojo.SysUser;
 import com.cdu.lhj.bstest.service.SendSms;
 import com.cdu.lhj.bstest.service.SysUserService;
@@ -29,10 +27,14 @@ public class SysUserController {
     private SendSms sendSms;
 
     @PostMapping("/sendCode")
+    @SaIgnore
     public SaResult sendCode(@RequestBody SmsBo smsBo) {
+        if(StrUtil.isEmpty(smsBo.getPhoneNum())){
+            return SaResult.error("手机号不能为空");
+        }
         String code = RandomUtil.randomNumbers(6);
         try {
-            sendSms.send(smsBo.getPhoneNum(), smsBo.getTemplateCode(), code, 2L);
+            sendSms.send(smsBo.getPhoneNum(), smsBo.getTemplateCode(), code, 1L);
             return SaResult.ok("发送成功");
         } catch (Exception e) {
             return SaResult.error(e.getMessage());
@@ -40,6 +42,7 @@ public class SysUserController {
     }
 
     @PostMapping("/doLoginByPhoneCode")
+    @SaIgnore
     public SaResult doLoginByPhoneCode(@RequestBody LoginSmsBo loginSmsBo) {
         // 判空
         if (StrUtil.isEmpty(loginSmsBo.getPhoneNum()) || StrUtil.isEmpty(loginSmsBo.getCode())) {
@@ -50,7 +53,10 @@ public class SysUserController {
             SysUser sysUser = sysUserService.doLoginByPhoneCode(loginSmsBo);
             if (sysUser != null) {
                 StpUtil.login(sysUser.getId());
-                return SaResult.data(StpUtil.getTokenValue());
+                Map<Object, Object> map = new HashMap<>();
+                map.put("token", StpUtil.getTokenValue());
+                map.put("expire", StpUtil.getTokenTimeout()/86400);
+                return SaResult.data(map);
             } else {
                 return SaResult.error("登录失败，手机号或者验证码错误");
             }
@@ -60,7 +66,32 @@ public class SysUserController {
         }
     }
 
+    @PostMapping("/updatePhone")
+    public SaResult updatePhone(@RequestBody UpdatePhoneBo updatePhoneBo){
+        // 拿到id
+        Long id = StpUtil.getLoginIdAsLong();
+        updatePhoneBo.setId(id);
+        try {
+            return SaResult.data(sysUserService.updateUserPhone(updatePhoneBo));
+        }catch (Exception e){
+            return SaResult.error(e.getMessage());
+        }
+    }
+
+    @PostMapping("/updatePwd")
+    public SaResult updatePwd(@RequestBody UpdatePwdBo updatePwdBo){
+        // 拿到id
+        Long id = StpUtil.getLoginIdAsLong();
+        updatePwdBo.setId(id);
+        try {
+            return SaResult.data(sysUserService.updateUserPwd(updatePwdBo));
+        }catch (Exception e){
+            return SaResult.error(e.getMessage());
+        }
+    }
+
     @PostMapping("/doLogin")
+    @SaIgnore
     public SaResult doLogin(@RequestBody UserBo userBo) {
         // 判空
         if (StrUtil.isEmpty(userBo.getName()) || StrUtil.isEmpty(userBo.getPwd())) {
@@ -85,6 +116,7 @@ public class SysUserController {
     }
 
     @PostMapping("/insert")
+    @SaIgnore
     public SaResult insert(@RequestBody SysUser user) {
         // 进行判空操作
         if (StrUtil.isEmpty(user.getUsername()) || StrUtil.isEmpty(user.getPassword())) {
@@ -93,7 +125,15 @@ public class SysUserController {
         if (sysUserService.getUserByName(user.getUsername()) != null) {
             return SaResult.error("用户名已存在");
         }
-        return SaResult.data(sysUserService.saveUser(user));
+        if(sysUserService.saveUser(user)){
+            StpUtil.login(user.getId());
+            Map<Object, Object> map = new HashMap<>();
+            map.put("token", StpUtil.getTokenValue());
+            map.put("expire", StpUtil.getTokenTimeout()/86400);
+            return SaResult.data(map);
+        }else {
+            return SaResult.error("添加失败");
+        }
     }
 
     @SaCheckPermission(value = {"admin"}, orRole = "super-admin")

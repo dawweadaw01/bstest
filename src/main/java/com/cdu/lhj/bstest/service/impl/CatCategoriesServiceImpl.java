@@ -1,5 +1,6 @@
 package com.cdu.lhj.bstest.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -34,7 +35,11 @@ public class CatCategoriesServiceImpl extends ServiceImpl<CatCategoriesMapper, C
             catCategoriesBo.setSize(10);
         }
         Page<CatCategories> catCategoriesPage = new Page<>(catCategoriesBo.getPage(), catCategoriesBo.getSize());
-        IPage<CatCategories> records = this.baseMapper.selectPage(catCategoriesPage, null);
+        LambdaQueryWrapper<CatCategories> eq = new LambdaQueryWrapper<CatCategories>().
+                like(catCategoriesBo.getName()!=null,CatCategories::getName, catCategoriesBo.getName()).
+                like(catCategoriesBo.getDescription()!=null,CatCategories::getDescription, catCategoriesBo.getDescription()).
+                like(catCategoriesBo.getOrigin()!=null,CatCategories::getOrigin, catCategoriesBo.getOrigin());
+        IPage<CatCategories> records = this.baseMapper.selectPage(catCategoriesPage, eq);
         records.getRecords().forEach(catCategories -> catCategories.setImages(imagesService.getImages(catCategories.getCategoryId())));
         return records;
     }

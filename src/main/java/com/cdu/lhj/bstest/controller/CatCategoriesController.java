@@ -8,6 +8,8 @@ import com.cdu.lhj.bstest.pojo.CatCategories;
 import com.cdu.lhj.bstest.service.CatCategoriesService;
 import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
 import jakarta.annotation.Resource;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdu.lhj.bstest.mapper.UserDetailsMapper">
+  <resultMap id="BaseResultMap" type="com.cdu.lhj.bstest.pojo.UserDetails">
+    <!--@mbg.generated-->
+    <!--@Table user_details-->
+    <id column="user_detail_id" jdbcType="INTEGER" property="userDetailId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="birth_date" jdbcType="DATE" property="birthDate" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="favorite_merchants" jdbcType="VARCHAR" property="favoriteMerchants" />
+    <result column="favorite_cats" jdbcType="VARCHAR" property="favoriteCats" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_detail_id, user_id, `name`, gender, birth_date, address, phone, email, favorite_merchants, 
+    favorite_cats
+  </sql>
+</mapper>

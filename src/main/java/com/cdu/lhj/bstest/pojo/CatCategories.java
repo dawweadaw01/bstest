@@ -38,7 +38,9 @@ public class CatCategories {
      */
     @TableField(value = "description")
     private String description;
-    // 不和数据库对应，自己组装
+    /**
+     不和数据库对应，自己组装
+      */
     @TableField(exist = false)
     private List<Image> images;
 }

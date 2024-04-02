@@ -1,6 +1,7 @@
 package com.cdu.lhj.bstest.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.cdu.lhj.bstest.pojo.SysUserRole;
@@ -82,6 +83,7 @@ public class SysUserRoleController {
     }
 
     @GetMapping("/getUserRole")
+    @SaIgnore
     public SaResult getUserByRole() {
         // 拿到id
         long id = StpUtil.getLoginIdAsLong();
