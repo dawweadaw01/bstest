@@ -11,5 +11,6 @@ public class CatDeBo {
     private Boolean availableForAdoption;
     private Long shopId;
     private Long categoryId;
-    private PageBo pageBo;
+    private Integer size;
+    private Integer page;
 }

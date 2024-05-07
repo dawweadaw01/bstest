@@ -3,12 +3,16 @@ package com.cdu.lhj.bstest.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
+import com.cdu.lhj.bstest.pojo.Cat;
 import com.cdu.lhj.bstest.pojo.Image;
+import com.cdu.lhj.bstest.service.CatService;
 import com.cdu.lhj.bstest.service.ImagesService;
 import jakarta.annotation.Resource;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -16,6 +20,9 @@ import java.util.Objects;
 public class ImagesController {
     @Resource
     private ImagesService imagesService;
+
+    @Resource
+    private CatService catService;
 
     @PostMapping("upload")
     public SaResult uploadImage(@RequestParam MultipartFile file) {
@@ -62,6 +69,26 @@ public class ImagesController {
         }
     }
 
+    @PostMapping("ShopCatDelete")
+    public SaResult ShopCatDeleteImage(@RequestParam Long imageId,@RequestParam Long catId) {
+        try {
+            String userId = (String)StpUtil.getLoginId();
+            Long userIdLong = Long.valueOf(userId);
+            List<Cat> catByShopId = catService.getCatByShopId(userIdLong);
+            // 查询是否是本店的猫
+            if(catByShopId.stream().noneMatch(cat -> cat.getCatId().equals(catId))){
+                return SaResult.error("无法删除不是本店的猫咪照片");
+            }
+            if(!imagesService.removeByImageIdAndId(imageId, catId)){
+                return SaResult.error("删除失败, 无法越权删除,或者图片不存在");
+            }else {
+                return SaResult.ok();
+            }
+        }catch (Exception e){
+            return SaResult.error(e.getMessage());
+        }
+    }
+
     @PostMapping("Update")
     public SaResult UpdateImage(@RequestBody Image image) {
         try {
@@ -84,6 +111,7 @@ public class ImagesController {
     }
 
     @SaCheckPermission(value = {"admin"}, orRole = "super-admin")
+    @CacheEvict(value = "images", allEntries = true)
     @PostMapping("adminDelete")
     public SaResult adminDeleteImage(@RequestParam Long id) {
         return SaResult.data(imagesService.removeById(id));
@@ -91,6 +119,7 @@ public class ImagesController {
 
     @SaCheckPermission(value = {"admin"}, orRole = "super-admin")
     @PostMapping("adminUpdate")
+    @CacheEvict(value = "images", allEntries = true)
     public SaResult adminUpdateImage(@RequestBody Image image) {
         return SaResult.data(imagesService.updateById(image));
     }

@@ -12,6 +12,9 @@ import com.cdu.lhj.bstest.service.CatService;
 import com.cdu.lhj.bstest.service.ImagesService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatService{
 
@@ -36,7 +39,7 @@ public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatSe
     @Override
     public IPage<Cat> getCatListByPage(CatDeBo catDeBo) {
         // 构造分页参数
-        Page<Cat> page = new Page<>(catDeBo.getPageBo().getPage(), catDeBo.getPageBo().getSize());
+        Page<Cat> page = new Page<>(catDeBo.getPage(), catDeBo.getSize());
         // 调用mapper查询
         IPage<Cat> listByPage = this.baseMapper.getCatListByPage(page, catDeBo);
         // 循环查询分类
@@ -47,8 +50,20 @@ public class CatServiceImpl extends ServiceImpl<CatMapper, Cat> implements CatSe
     }
 
     @Override
-    public Cat getByshopIdAndCatId(Long userIdLong, Long catId) {
+    public Cat getByShopIdAndCatId(Long userIdLong, Long catId) {
         LambdaQueryWrapper<Cat> wrapper = new LambdaQueryWrapper<Cat>().eq(Cat::getShopId, userIdLong).eq(Cat::getCatId, catId);
         return this.getOne(wrapper);
     }
+
+    @Override
+    public List<Cat> getCatByShopId(Long id) {
+        LambdaQueryWrapper<Cat> wrapper = new LambdaQueryWrapper<Cat>().eq(Cat::getShopId, id);
+        List<Cat> list = this.list(wrapper);
+        list.forEach(cat -> {
+            cat.setCatCategories(catCategoriesService.getCatCategoriesById(cat.getCategoryId()));
+            cat.setImages(imagesService.getImages(cat.getCatId()));
+        });
+        return list;
+    }
 }
+ 

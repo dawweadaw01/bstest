@@ -21,6 +21,9 @@ public class CatCategoriesServiceImpl extends ServiceImpl<CatCategoriesMapper, C
     @Override
     public CatCategories getCatCategoriesById(Long id) {
         CatCategories catCategories = this.baseMapper.selectById(id);
+        if (catCategories == null) {
+            return null;
+        }
         catCategories.setImages(imagesService.getImages(catCategories.getCategoryId()));
         return catCategories;
     }

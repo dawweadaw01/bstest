@@ -58,6 +58,7 @@ public class CatController {
         return SaResult.data(catService.getCatListByPage(catDeBo));
     }
 
+
     @SaCheckPermission(value = "admin", orRole = "super-admin")
     @PostMapping("/adminGetCatByIdByPage")
     public SaResult getCatById(@RequestBody CatDeBo catDeBo) {
@@ -70,7 +71,7 @@ public class CatController {
         try {
             String userId = (String)StpUtil.getLoginId();
             Long userIdLong = Long.valueOf(userId);
-            if(catService.getByshopIdAndCatId(userIdLong, catId) == null){
+            if(catService.getByShopIdAndCatId(userIdLong, catId) == null){
                 return SaResult.error("无法上传不是本店的猫咪照片");
             }
             url = imagesService.saveImage(file, catId);
@@ -78,6 +79,11 @@ public class CatController {
             return SaResult.error(e.getMessage());
         }
         return SaResult.data(url);
+    }
+
+    @GetMapping("/getCatByShopId")
+    public SaResult getCatByShopId(@RequestParam Long shopId) {
+        return SaResult.data(catService.getCatByShopId(shopId));
     }
 
     @SaCheckPermission(value = "admin", orRole = "super-admin")

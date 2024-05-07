@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdu.lhj.bstest.mapper.ShopsMapper">
+  <resultMap id="BaseResultMap" type="com.cdu.lhj.bstest.pojo.Shops">
+    <!--@mbg.generated-->
+    <!--@Table shops-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="off_day" jdbcType="VARCHAR" property="offDay" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="cover" jdbcType="VARCHAR" property="cover" />
+    <result column="owner_id" jdbcType="BIGINT" property="ownerId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, address, off_day, phone_number, logo, cover, owner_id
+  </sql>
+</mapper>

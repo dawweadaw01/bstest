@@ -23,7 +23,7 @@ public class ImagesServiceImpl extends ServiceImpl<ImagesMapper, Image> implemen
     private TencentCOSUtil tencentCOSUtil;
     @Override
     @Transactional
-    @CacheEvict(value = "images", key = "#id")
+    @CacheEvict(value = "images", allEntries = true)
     public String saveImage(MultipartFile file, Long id){
         //先上传
         String url = tencentCOSUtil.upLoadFile(file);
@@ -47,7 +47,7 @@ public class ImagesServiceImpl extends ServiceImpl<ImagesMapper, Image> implemen
     }
 
     @Override
-    @CacheEvict(value = "images", key = "#userIdLong")
+    @CacheEvict(value = "images", allEntries = true)
     public boolean removeByImageIdAndId(Long imageId, Long userIdLong) {
         return this.lambdaUpdate().eq(Image::getId, userIdLong).eq(Image::getImageId, imageId).remove();
     }

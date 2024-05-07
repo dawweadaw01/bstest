@@ -60,9 +60,9 @@ public class SysUserController {
             } else {
                 return SaResult.error("登录失败，手机号或者验证码错误");
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return SaResult.error("登录失败，手机号或者验证码错误");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return SaResult.error(e.getMessage());
         }
     }
 

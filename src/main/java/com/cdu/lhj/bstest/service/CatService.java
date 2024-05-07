@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cdu.lhj.bstest.pojo.Bo.CatDeBo;
 import com.cdu.lhj.bstest.pojo.Cat;
 
+import java.util.List;
+
 public interface CatService extends IService<Cat>{
 
     boolean removeByCatIdAndId( Long catId, Long id);
@@ -13,5 +15,7 @@ public interface CatService extends IService<Cat>{
 
     IPage<Cat> getCatListByPage(CatDeBo catDeBo);
 
-    Cat getByshopIdAndCatId(Long userIdLong, Long catId);
+    Cat getByShopIdAndCatId(Long userIdLong, Long catId);
+
+    List<Cat> getCatByShopId(Long id);
 }

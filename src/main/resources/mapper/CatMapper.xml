@@ -44,8 +44,5 @@
           </if>
           and shop_id = #{catDeBo.shopId}
       </where>
-      <if test="catDeBo.pageBo.order != null and catDeBo.pageBo.order != ''">
-          order by #{catDeBo.pageBo.order}
-      </if>
   </select>
 </mapper>
