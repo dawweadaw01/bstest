@@ -56,4 +56,7 @@ public class Appointments {
     private BigDecimal fixedPrice;
     @TableField(exist = false)
     private String appointmentTimeStr;
+
+    @TableField(exist = false)
+    private Shops shops;
 }

@@ -1,6 +1,7 @@
 package com.cdu.lhj.bstest.controller;
 
 
+import cn.dev33.satoken.annotation.SaIgnore;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
@@ -38,6 +39,10 @@ public class PayController {
         //Orders orders = ordersService.selectByOrderID(oid);
         //if(orders==null) return;
         //1. 创建CLinet，通过SDK提供的Client，负责调用支付宝的API
+        if(appointmentsService.getById(Long.valueOf(oid)).getOrderStatus() != 0){
+            return;
+        }
+
         AlipayClient alipayClient = new DefaultAlipayClient(GATEWAY_URL, alipayConfig.getAppId(),
                 alipayConfig.getAppPrivateKey(), FORMAT, CHARSET, alipayConfig.getAlipayPublicKey(), SIGN_TYPE);
 
@@ -64,7 +69,8 @@ public class PayController {
         httpResponse.getWriter().close();
     }
 
-    @PostMapping("/notify")  // 注意这里必须是POST接口
+    @PostMapping("/notify")
+    @SaIgnore
     public void payNotify(HttpServletRequest request) throws Exception {
         if (request.getParameter("trade_status").equals("TRADE_SUCCESS")) {
             System.out.println("=========支付宝异步回调========");
@@ -83,7 +89,17 @@ public class PayController {
                 // 转换为Long
                 Long orderId = Long.valueOf(oid);
                 // 更新订单状态
-                appointmentsService.updateAppointmentsStatus(orderId);
+                boolean flag = appointmentsService.updateAppointmentsStatus(orderId, 1L);
+                if (flag) {
+                    //打印日志
+                    System.out.println("支付成功");
+                } else {
+                    //打印日志
+                    System.out.println("支付失败");
+                }
+            }else {
+                //打印日志
+                System.out.println("验证失败");
             }
         }
     }

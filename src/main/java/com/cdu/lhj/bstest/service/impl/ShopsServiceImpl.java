@@ -14,7 +14,6 @@ import com.cdu.lhj.bstest.pojo.ShopsImages;
 import com.cdu.lhj.bstest.service.CatService;
 import com.cdu.lhj.bstest.service.ShopsImagesService;
 import com.cdu.lhj.bstest.service.ShopsService;
-import com.cdu.lhj.bstest.util.SimpleTimestampIdGenerator;
 import jakarta.annotation.Resource;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -37,8 +36,7 @@ public class ShopsServiceImpl extends ServiceImpl<ShopsMapper, Shops> implements
     @Transactional
     @CacheEvict(value = "shops", allEntries = true)
     public boolean insertShops(Shops shops) {
-        //赋值id
-        shops.setId(SimpleTimestampIdGenerator.nextId());
+        shops.setId(shops.getOwnerId());
         // 初始化为无状态申请中
         shops.setStatus(0);
         return save(shops);
@@ -94,7 +92,8 @@ public class ShopsServiceImpl extends ServiceImpl<ShopsMapper, Shops> implements
 
     @Override
     public Shops getShopsById(Long id) {
-        Shops shops = getById(id);
+        LambdaUpdateWrapper<Shops> eq = new LambdaUpdateWrapper<Shops>().eq(Shops::getId, id).eq(Shops::getStatus, ShopStatus.OPEN.getStatus());
+        Shops shops = getOne(eq);
         List<Cat> catList = catService.getCatByShopId(shops.getId());
         List<String> catImages = new ArrayList<>();
         catList.forEach(cat -> {

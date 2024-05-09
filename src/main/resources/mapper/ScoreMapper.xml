@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdu.lhj.bstest.mapper.ScoreMapper">
+  <resultMap id="BaseResultMap" type="com.cdu.lhj.bstest.pojo.Score">
+    <!--@mbg.generated-->
+    <!--@Table score-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="store_id" jdbcType="BIGINT" property="storeId" />
+    <result column="score" jdbcType="BIGINT" property="score" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, store_id, score
+  </sql>
+
+  <select id="getAllUserPreference" resultType="com.cdu.lhj.bstest.pojo.Vo.ScoreVo">
+    select user_id,store_id,score from score
+    </select>
+</mapper>

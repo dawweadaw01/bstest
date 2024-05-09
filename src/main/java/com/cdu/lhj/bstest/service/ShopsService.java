@@ -19,4 +19,5 @@ public interface ShopsService extends IService<Shops>{
     Shops getShopsByOwnerId(Long OwnerId);
 
     Shops getShopsById(Long id);
+
 }
