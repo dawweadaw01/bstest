@@ -13,4 +13,6 @@ public interface ScoreService extends IService<Score>{
 
 
     List<ScoreVo> getAllUserPreference();
+
+    Long getScoreByUserIdAndStoreId(Long storeId, long loginIdAsLong);
 }
