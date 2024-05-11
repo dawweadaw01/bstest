@@ -11,9 +11,11 @@ import com.cdu.lhj.bstest.pojo.Bo.ShopsSearchBo;
 import com.cdu.lhj.bstest.pojo.Cat;
 import com.cdu.lhj.bstest.pojo.Shops;
 import com.cdu.lhj.bstest.pojo.ShopsImages;
+import com.cdu.lhj.bstest.pojo.SysUserRole;
 import com.cdu.lhj.bstest.service.CatService;
 import com.cdu.lhj.bstest.service.ShopsImagesService;
 import com.cdu.lhj.bstest.service.ShopsService;
+import com.cdu.lhj.bstest.service.SysUserRoleService;
 import jakarta.annotation.Resource;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,13 +34,18 @@ public class ShopsServiceImpl extends ServiceImpl<ShopsMapper, Shops> implements
     @Resource
     private ShopsImagesService shopsImagesService;
 
+    @Resource
+    private SysUserRoleService sysUserRoleService;
+
     @Override
     @Transactional
     @CacheEvict(value = "shops", allEntries = true)
     public boolean insertShops(Shops shops) {
+        // 给用户赋予shop权限
+        sysUserRoleService.saveUserRole(new SysUserRole(null,shops.getOwnerId(),25708423365376L));
         shops.setId(shops.getOwnerId());
         // 初始化为无状态申请中
-        shops.setStatus(0);
+        shops.setStatus(1);
         return save(shops);
     }
 
