@@ -74,10 +74,11 @@ public class ShopsServiceImpl extends ServiceImpl<ShopsMapper, Shops> implements
     }
 
     @Override
-    @Cacheable(value = "shops", key = "#shopsSearchBo.keyword + '-' + #shopsSearchBo.page+'-' + #shopsSearchBo.size")
+    //@Cacheable(value = "shops", key = "#shopsSearchBo.keyword + '-' + #shopsSearchBo.page+'-' + #shopsSearchBo.size")
     public IPage<Shops> getShopsBySearch(ShopsSearchBo shopsSearchBo) {
         LambdaQueryWrapper<Shops> eq = new LambdaQueryWrapper<Shops>()
                 .like(shopsSearchBo.getKeyword() != null, Shops::getName, shopsSearchBo.getKeyword())
+                .or()
                 .like(shopsSearchBo.getKeyword() != null, Shops::getAddress, shopsSearchBo.getKeyword())
                 .eq(Shops::getStatus, ShopStatus.OPEN.getStatus());
         if (shopsSearchBo.getPage() == null || shopsSearchBo.getPage() == 0) {
