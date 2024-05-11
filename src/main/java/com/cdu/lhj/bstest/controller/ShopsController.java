@@ -1,5 +1,6 @@
 package com.cdu.lhj.bstest.controller;
 
+import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.cdu.lhj.bstest.pojo.Bo.ShopsSearchBo;
@@ -66,6 +67,7 @@ public class ShopsController {
         }
     }
     @PostMapping("/getShopsBySearch")
+    @SaIgnore
     public SaResult getShopsBySearch(@RequestBody ShopsSearchBo shopsSearchBo) {
         try {
             return SaResult.data(shopsService.getShopsBySearch(shopsSearchBo));

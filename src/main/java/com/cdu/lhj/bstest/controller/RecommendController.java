@@ -1,6 +1,7 @@
 package com.cdu.lhj.bstest.controller;
 
 
+import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.cdu.lhj.bstest.pojo.Bo.ShopsSearchBo;
@@ -25,7 +26,15 @@ public class RecommendController {
     private ShopsService shopsService;
 
     @GetMapping("/getShopsRecommend")
+    @SaIgnore
     public SaResult recommend(){
+        try {
+            long loginIdAsLong = StpUtil.getLoginIdAsLong();
+        }catch (Exception e){
+            List<Shops> records = shopsService.getShopsBySearch(new ShopsSearchBo(null, 1, 6)).getRecords();
+            return SaResult.data(records);
+        }
+
         try {
             // 拿到id
             long loginIdAsLong = StpUtil.getLoginIdAsLong();

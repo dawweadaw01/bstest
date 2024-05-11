@@ -2,6 +2,7 @@ package com.cdu.lhj.bstest.controller;
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.util.SaResult;
 import com.cdu.lhj.bstest.pojo.Bo.CatCategoriesBo;
 import com.cdu.lhj.bstest.pojo.CatCategories;
@@ -51,6 +52,7 @@ public class CatCategoriesController {
 
     // 分页查询
     @PostMapping("/getCatCategories")
+    @SaIgnore
     public SaResult getCatCategories(@RequestBody CatCategoriesBo catCategoriesBo) {
         try {
             return SaResult.data(catCategoriesService.getCatCategoriesListByPage(catCategoriesBo));
